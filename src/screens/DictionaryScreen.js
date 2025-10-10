@@ -7,90 +7,87 @@ import {
   TextInput,
   View
 } from 'react-native';
+import { QuickQuiz } from '../components/QuickQuiz';
 
-const DictionaryScreen = ({
+export const DictionaryScreen = ({
   query,
-  onChangeQuery,
-  entry,
+  onQueryChange,
+  activeEntry,
   suggestions,
-  onChipPress,
-  dailyWord,
-  refreshDailyWord,
+  onSelectSuggestion,
   history,
+  onSelectHistory,
+  onClearHistory,
   onToggleFavorite,
-  isFavorite,
-  relatedWords
+  favorites,
+  dailyWord,
+  onRefreshDailyWord,
+  filteredEntries,
+  categoryOptions,
+  selectedCategory,
+  onSelectCategory
 }) => {
+  const isFavorite = activeEntry ? favorites.includes(activeEntry.word) : false;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Mini Dicionário</Text>
       <Text style={styles.subtitle}>
-        Digite uma palavra em inglês para ver uma explicação rápida em português.
+        Procure palavras em inglês, veja significados em português e salve suas favoritas.
       </Text>
       <TextInput
         style={styles.input}
         placeholder="Digite aqui..."
         value={query}
-        onChangeText={onChangeQuery}
+        onChangeText={onQueryChange}
         autoCapitalize="none"
         autoCorrect={false}
       />
       <View style={styles.resultBox}>
-        {entry ? (
+        {activeEntry ? (
           <>
             <View style={styles.resultHeader}>
-              <Text style={styles.definitionTitle}>{entry.word}</Text>
+              <Text style={styles.definitionTitle}>{activeEntry.word}</Text>
               <Pressable
-                onPress={() => onToggleFavorite(entry.word)}
+                onPress={() => onToggleFavorite(activeEntry.word)}
                 style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
               >
-                <Text
-                  style={[
-                    styles.favoriteButtonText,
-                    isFavorite && styles.favoriteButtonTextActive
-                  ]}
-                >
-                  {isFavorite ? 'Salvo' : 'Salvar'}
+                <Text style={[styles.favoriteButtonText, isFavorite && styles.favoriteButtonTextActive]}>
+                  {isFavorite ? '★ Favorito' : '☆ Favoritar'}
                 </Text>
               </Pressable>
             </View>
-            <Text style={styles.definition}>{entry.meaning}</Text>
-            <Text style={styles.exampleLabel}>Exemplo</Text>
-            <Text style={styles.exampleText}>{entry.example}</Text>
+            <Text style={styles.definition}>{activeEntry.meaning}</Text>
+            <Text style={styles.exampleLabel}>Exemplo:</Text>
+            <Text style={styles.exampleText}>{activeEntry.example}</Text>
           </>
         ) : (
-          <Text style={styles.placeholder}>Nenhum resultado encontrado.</Text>
+          <Text style={styles.placeholder}>Nenhum resultado encontrado. Tente outra palavra.</Text>
         )}
       </View>
-      {!entry && suggestions.length > 0 && (
+
+      {!activeEntry && suggestions.length > 0 && (
         <View style={styles.suggestionsBox}>
           <Text style={styles.sectionTitle}>Talvez você procure:</Text>
           <View style={styles.chipList}>
             {suggestions.map((item) => (
-              <Pressable key={item} onPress={() => onChipPress(item)} style={styles.chip}>
-                <Text style={styles.chipText}>{item}</Text>
+              <Pressable
+                key={item}
+                onPress={() => onSelectSuggestion(item)}
+                style={styles.suggestionChip}
+              >
+                <Text style={styles.suggestionText}>{item}</Text>
               </Pressable>
             ))}
           </View>
         </View>
       )}
-      {entry && relatedWords.length > 0 && (
-        <View style={styles.suggestionsBox}>
-          <Text style={styles.sectionTitle}>Relacionadas</Text>
-          <View style={styles.chipList}>
-            {relatedWords.map((item) => (
-              <Pressable key={item} onPress={() => onChipPress(item)} style={styles.secondaryChip}>
-                <Text style={styles.secondaryChipText}>{item}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-      )}
+
       {dailyWord && (
         <View style={styles.dailyWordBox}>
           <View style={styles.dailyWordHeader}>
-            <Text style={styles.sectionTitle}>Palavra aleatória</Text>
-            <Pressable onPress={refreshDailyWord} style={styles.secondaryButton}>
+            <Text style={styles.sectionTitle}>Palavra do momento</Text>
+            <Pressable onPress={onRefreshDailyWord} style={styles.secondaryButton}>
               <Text style={styles.secondaryButtonText}>Surpreenda-me</Text>
             </Pressable>
           </View>
@@ -99,26 +96,72 @@ const DictionaryScreen = ({
           <Text style={styles.dailyWordExample}>{dailyWord.example}</Text>
         </View>
       )}
+
       {history.length > 0 && (
         <View style={styles.historyBox}>
-          <Text style={styles.sectionTitle}>Histórico recente</Text>
+          <View style={styles.historyHeader}>
+            <Text style={styles.sectionTitle}>Histórico recente</Text>
+            <Pressable onPress={onClearHistory} style={styles.linkButton}>
+              <Text style={styles.linkButtonText}>Limpar</Text>
+            </Pressable>
+          </View>
           <View style={styles.chipList}>
             {history.map((item) => (
-              <Pressable key={item} onPress={() => onChipPress(item)} style={styles.historyChip}>
+              <Pressable
+                key={item}
+                onPress={() => onSelectHistory(item)}
+                style={styles.historyChip}
+              >
                 <Text style={styles.historyText}>{item}</Text>
               </Pressable>
             ))}
           </View>
         </View>
       )}
+
+      <View style={styles.categoriesBox}>
+        <Text style={styles.sectionTitle}>Explore por categoria</Text>
+        <View style={styles.chipList}>
+          {categoryOptions.map((category) => {
+            const isSelected = category === selectedCategory;
+            return (
+              <Pressable
+                key={category}
+                onPress={() => onSelectCategory(category)}
+                style={[styles.categoryChip, isSelected && styles.categoryChipActive]}
+              >
+                <Text
+                  style={[styles.categoryText, isSelected && styles.categoryTextActive]}
+                >
+                  {category === 'todas' ? 'Todas' : category}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <View style={styles.entryList}>
+          {filteredEntries.map((entry) => (
+            <Pressable
+              key={entry.word}
+              onPress={() => onSelectSuggestion(entry.word)}
+              style={styles.entryCard}
+            >
+              <Text style={styles.entryWord}>{entry.word}</Text>
+              <Text style={styles.entryMeaning}>{entry.meaning}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      <QuickQuiz entries={filteredEntries} onSelectWord={onSelectSuggestion} />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     padding: 24,
-    alignItems: 'stretch',
     gap: 16
   },
   title: {
@@ -143,17 +186,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#fff',
     padding: 16,
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#eee',
-    gap: 12
+    gap: 8
   },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 12
   },
   definitionTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
     color: '#333',
     textTransform: 'capitalize'
@@ -169,7 +214,8 @@ const styles = StyleSheet.create({
   },
   exampleText: {
     fontSize: 16,
-    color: '#555'
+    color: '#444',
+    lineHeight: 22
   },
   placeholder: {
     fontSize: 16,
@@ -193,25 +239,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8
   },
-  chip: {
+  suggestionChip: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 999,
     backgroundColor: '#f0f0f0'
   },
-  chipText: {
+  suggestionText: {
     fontSize: 14,
     color: '#333'
-  },
-  secondaryChip: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: '#e8f0ff'
-  },
-  secondaryChipText: {
-    fontSize: 14,
-    color: '#2d4b7c'
   },
   dailyWordBox: {
     backgroundColor: '#222',
@@ -223,17 +259,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
-  },
-  secondaryButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: '#444'
-  },
-  secondaryButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14
   },
   dailyWordWord: {
     fontSize: 22,
@@ -247,7 +272,18 @@ const styles = StyleSheet.create({
   },
   dailyWordExample: {
     fontSize: 14,
-    color: '#e1e1e1'
+    color: '#d9d9d9'
+  },
+  secondaryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#444'
+  },
+  secondaryButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14
   },
   historyBox: {
     backgroundColor: '#fff',
@@ -256,6 +292,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     gap: 12
+  },
+  historyHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   historyChip: {
     paddingVertical: 6,
@@ -267,24 +308,75 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333'
   },
+  linkButton: {
+    padding: 8
+  },
+  linkButtonText: {
+    color: '#1d4ed8',
+    fontWeight: '600'
+  },
   favoriteButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#ccc'
+    borderColor: '#bbb'
   },
   favoriteButtonActive: {
-    backgroundColor: '#ffd54f',
-    borderColor: '#f0b400'
+    backgroundColor: '#ffe08a',
+    borderColor: '#f2c94c'
   },
   favoriteButtonText: {
-    color: '#555',
+    fontSize: 14,
+    color: '#333',
     fontWeight: '600'
   },
   favoriteButtonTextActive: {
-    color: '#2f1b00'
+    color: '#78450f'
+  },
+  categoriesBox: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#eee',
+    gap: 12
+  },
+  categoryChip: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#f0f0f0'
+  },
+  categoryChipActive: {
+    backgroundColor: '#222'
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#333'
+  },
+  categoryTextActive: {
+    color: '#fff'
+  },
+  entryList: {
+    gap: 12
+  },
+  entryCard: {
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 12,
+    padding: 16,
+    backgroundColor: '#fafafa',
+    gap: 4
+  },
+  entryWord: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#222',
+    textTransform: 'capitalize'
+  },
+  entryMeaning: {
+    fontSize: 14,
+    color: '#555'
   }
 });
-
-export default DictionaryScreen;

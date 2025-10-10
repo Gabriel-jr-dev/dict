@@ -1,27 +1,29 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const AboutScreen = () => {
+export const AboutScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sobre o Mini Dicionário</Text>
       <Text style={styles.paragraph}>
-        O Mini Dicionário ajuda estudantes brasileiros a praticarem vocabulário
-        essencial em inglês. Buscamos significados diretos, exemplos práticos e
-        recursos extras para lembrar das palavras com facilidade.
+        Este aplicativo foi pensado para estudantes brasileiros que estão dando os
+        primeiros passos no inglês. Pesquise palavras, veja exemplos em frases e
+        organize uma lista personalizada de favoritos para revisar sempre que quiser.
       </Text>
+
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Como aproveitar melhor:</Text>
-        <Text style={styles.paragraph}>• Pesquise palavras do dia a dia.</Text>
-        <Text style={styles.paragraph}>• Salve termos favoritos para revisar depois.</Text>
-        <Text style={styles.paragraph}>• Explore as categorias para aprender em blocos.</Text>
+        <Text style={styles.cardTitle}>Como aproveitar melhor</Text>
+        <Text style={styles.paragraph}>• Busque palavras novas todos os dias.</Text>
+        <Text style={styles.paragraph}>• Use o quiz relâmpago para testar sua memória.</Text>
+        <Text style={styles.paragraph}>• Revise os favoritos antes de provas e apresentações.</Text>
       </View>
+
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Próximos passos</Text>
         <Text style={styles.paragraph}>
-          Estamos trabalhando em listas temáticas, atividades interativas e
-          desafios semanais para transformar o estudo em uma rotina leve e
-          divertida.
+          Estamos trabalhando em novas coleções temáticas, exercícios de áudio e desafios
+          semanais. Envie sugestões de palavras ou funcionalidades para ajudar outros
+          estudantes!
         </Text>
       </View>
     </ScrollView>
@@ -30,6 +32,7 @@ const AboutScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     padding: 24,
     gap: 16
   },
@@ -40,22 +43,20 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontSize: 16,
-    lineHeight: 24,
-    color: '#444'
+    color: '#444',
+    lineHeight: 24
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#eee',
+    padding: 16,
     gap: 8
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#333'
+    fontWeight: '700',
+    color: '#222'
   }
 });
-
-export default AboutScreen;
