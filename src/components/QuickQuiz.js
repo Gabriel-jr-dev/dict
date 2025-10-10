@@ -1,0 +1,149 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+const getRandomOptions = (entries, answerWord) => {
+  if (entries.length <= 3) {
+    return entries.map((entry) => entry.word);
+  }
+
+  const options = new Set([answerWord]);
+  while (options.size < 3) {
+    const random = entries[Math.floor(Math.random() * entries.length)].word;
+    options.add(random);
+  }
+
+  return Array.from(options).sort(() => Math.random() - 0.5);
+};
+
+export const QuickQuiz = ({ entries, onSelectWord }) => {
+  const [feedback, setFeedback] = useState(null);
+  const [answer, setAnswer] = useState(() =>
+    entries.length > 0 ? entries[Math.floor(Math.random() * entries.length)] : null
+  );
+
+  const options = useMemo(() => {
+    if (!answer) {
+      return [];
+    }
+
+    return getRandomOptions(entries, answer.word);
+  }, [answer, entries]);
+
+  useEffect(() => {
+    if (entries.length === 0) {
+      setAnswer(null);
+      setFeedback(null);
+      return;
+    }
+
+    if (!answer || !entries.some((entry) => entry.word === answer.word)) {
+      setAnswer(entries[Math.floor(Math.random() * entries.length)]);
+      setFeedback(null);
+    }
+  }, [entries, answer]);
+
+  const handleAnswer = (option) => {
+    if (!answer) {
+      return;
+    }
+
+    const isCorrect = option === answer.word;
+    setFeedback(isCorrect ? 'Acertou! Continue praticando.' : 'Ops! Tente novamente.');
+
+    if (isCorrect) {
+      onSelectWord(option);
+    }
+  };
+
+  const handleNext = () => {
+    if (entries.length === 0) {
+      return;
+    }
+
+    setFeedback(null);
+    setAnswer(entries[Math.floor(Math.random() * entries.length)]);
+  };
+
+  if (!answer) {
+    return null;
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Quiz relâmpago</Text>
+      <Text style={styles.subtitle}>Qual palavra corresponde ao significado abaixo?</Text>
+      <Text style={styles.meaning}>{answer.meaning}</Text>
+      <View style={styles.options}>
+        {options.map((option) => (
+          <Pressable
+            key={option}
+            style={styles.optionButton}
+            onPress={() => handleAnswer(option)}
+          >
+            <Text style={styles.optionText}>{option}</Text>
+          </Pressable>
+        ))}
+      </View>
+      {feedback && <Text style={styles.feedback}>{feedback}</Text>}
+      <Pressable onPress={handleNext} style={styles.secondaryButton}>
+        <Text style={styles.secondaryButtonText}>Nova pergunta</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: '#eee'
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#222'
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#666'
+  },
+  meaning: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 22
+  },
+  options: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  optionButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#f0f0f0'
+  },
+  optionText: {
+    fontSize: 14,
+    color: '#222'
+  },
+  feedback: {
+    fontSize: 14,
+    color: '#2f855a',
+    fontWeight: '600'
+  },
+  secondaryButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#222'
+  },
+  secondaryButtonText: {
+    color: '#fff',
+    fontWeight: '600'
+  }
+});
