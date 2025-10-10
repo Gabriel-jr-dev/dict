@@ -1,80 +1,3 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
-import { NavigationTabs } from './src/components/NavigationTabs';
-import { useDictionaryData } from './src/hooks/useDictionaryData';
-import { wordMap } from './src/data/entries';
-import { DictionaryScreen } from './src/screens/DictionaryScreen';
-import { FavoritesScreen } from './src/screens/FavoritesScreen';
-import { AboutScreen } from './src/screens/AboutScreen';
-
-const tabs = [
-  { id: 'dictionary', label: 'Dicionário' },
-  { id: 'favorites', label: 'Favoritos' },
-  { id: 'about', label: 'Sobre' }
-];
-
-export default function App() {
-  const [activeTab, setActiveTab] = useState('dictionary');
-
-  const {
-    query,
-    setQuery,
-    activeEntry,
-    suggestions,
-    history,
-    favorites,
-    toggleFavorite,
-    dailyWord,
-    refreshDailyWord,
-    handleSelectWord,
-    clearHistory,
-    filteredEntries,
-    categoryOptions,
-    selectedCategory,
-    setSelectedCategory
-  } = useDictionaryData();
-
-  const handleNavigateToDictionary = (word) => {
-    setActiveTab('dictionary');
-    handleSelectWord(word);
-  };
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dictionary':
-        return (
-          <DictionaryScreen
-            query={query}
-            onQueryChange={setQuery}
-            activeEntry={activeEntry}
-            suggestions={suggestions}
-            onSelectSuggestion={handleSelectWord}
-            history={history}
-            onSelectHistory={handleSelectWord}
-            onClearHistory={clearHistory}
-            onToggleFavorite={toggleFavorite}
-            favorites={favorites}
-            dailyWord={dailyWord}
-            onRefreshDailyWord={refreshDailyWord}
-            filteredEntries={filteredEntries}
-            categoryOptions={categoryOptions}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
-        );
-      case 'favorites':
-        return (
-          <FavoritesScreen
-            favorites={favorites}
-            onSelectWord={handleNavigateToDictionary}
-            onToggleFavorite={toggleFavorite}
-            wordMap={wordMap}
-          />
-        );
-      case 'about':
-      default:
-        return <AboutScreen />;
-    }
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
@@ -178,8 +101,6 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
-      <NavigationTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      <View style={styles.pageContainer}>{renderContent()}</View>
       <View style={styles.navBar}>
         <Pressable
           style={[styles.navButton, activePage === 'dictionary' && styles.navButtonActive]}
@@ -308,8 +229,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f2f2f2'
   },
-  pageContainer: {
-    flex: 1
   container: {
     flexGrow: 1,
     padding: 24,
