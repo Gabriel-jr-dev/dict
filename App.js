@@ -289,16 +289,7 @@ export default function App() {
             </Text>
           </View>
         )}
-        {activePage === 'study' && (
-          <StudyScreen
-            favorites={favoriteEntries}
-            onChipPress={handleChipPress}
-            categories={categories}
-            dictionary={dictionary}
-          />
-        )}
-        {activePage === 'about' && <AboutScreen />}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
