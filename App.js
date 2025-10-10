@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -9,21 +9,94 @@ import {
   TextInput,
   View
 } from 'react-native';
-import { useState } from 'react';
 
 const words = {
   hello: 'um cumprimento amigável',
   world: 'o planeta que habitamos',
   react: 'biblioteca para construir interfaces',
   expo: 'ferramentas para apps React Native',
-  dictionary: 'coleção de palavras e significados'
+  dictionary: 'coleção de palavras e significados',
+  student: 'pessoa que estuda ou está em processo de aprendizagem',
+  teacher: 'profissional responsável por orientar e ensinar alunos',
+  learn: 'adquirir conhecimento ou habilidade nova',
+  practice: 'repetir uma atividade para ganhar confiança e domínio',
+  homework: 'tarefas escolares para realizar fora da sala de aula'
+};
+
+const dictionaryEntries = Object.entries(words);
+
+const getDefinition = (term) => {
+  if (!term) {
+    return undefined;
+  }
+
+  return words[term] ?? undefined;
+};
+
+const getSuggestions = (term) => {
+  if (!term) {
+    return [];
+  }
+
+  const normalized = term.toLowerCase();
+
+  return Object.keys(words)
+    .filter((word) => word.includes(normalized) && word !== normalized)
+    .slice(0, 5);
+};
+
+const getRandomEntry = () => {
+  if (dictionaryEntries.length === 0) {
+    return undefined;
+  }
+
+  const index = Math.floor(Math.random() * dictionaryEntries.length);
+  const [word, meaning] = dictionaryEntries[index];
+
+  return { word, meaning };
+};
+
+const addToHistory = (history, term) => {
+  if (!term || history.includes(term)) {
+    return history;
+  }
+
+  const updated = [term, ...history];
+
+  return updated.slice(0, 8);
 };
 
 export default function App() {
   const [query, setQuery] = useState('');
   const [activePage, setActivePage] = useState('dictionary');
+  const [dailyWord, setDailyWord] = useState(() => getRandomEntry());
+  const [history, setHistory] = useState([]);
 
-  const definition = words[query.trim().toLowerCase()];
+  const normalizedQuery = query.trim().toLowerCase();
+  const definition = getDefinition(normalizedQuery);
+  const suggestions = useMemo(
+    () => getSuggestions(normalizedQuery),
+    [normalizedQuery]
+  );
+
+  useEffect(() => {
+    if (definition && normalizedQuery) {
+      setHistory((prev) => addToHistory(prev, normalizedQuery));
+    }
+  }, [definition, normalizedQuery]);
+
+  const refreshDailyWord = () => {
+    const newWord = getRandomEntry();
+
+    if (newWord) {
+      setDailyWord(newWord);
+      setQuery('');
+    }
+  };
+
+  const handleChipPress = (value) => {
+    setQuery(value);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -65,11 +138,58 @@ export default function App() {
             />
             <View style={styles.resultBox}>
               {definition ? (
-                <Text style={styles.definition}>{definition}</Text>
+                <>
+                  <Text style={styles.definitionTitle}>{query.trim()}</Text>
+                  <Text style={styles.definition}>{definition}</Text>
+                </>
               ) : (
                 <Text style={styles.placeholder}>Nenhum resultado encontrado.</Text>
               )}
             </View>
+            {!definition && suggestions.length > 0 && (
+              <View style={styles.suggestionsBox}>
+                <Text style={styles.sectionTitle}>Talvez você procure:</Text>
+                <View style={styles.suggestionsList}>
+                  {suggestions.map((item) => (
+                    <Pressable
+                      key={item}
+                      onPress={() => handleChipPress(item)}
+                      style={styles.suggestionChip}
+                    >
+                      <Text style={styles.suggestionText}>{item}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+            )}
+            {dailyWord && (
+              <View style={styles.dailyWordBox}>
+                <View style={styles.dailyWordHeader}>
+                  <Text style={styles.sectionTitle}>Palavra aleatória</Text>
+                  <Pressable onPress={refreshDailyWord} style={styles.secondaryButton}>
+                    <Text style={styles.secondaryButtonText}>Surpreenda-me</Text>
+                  </Pressable>
+                </View>
+                <Text style={styles.dailyWordWord}>{dailyWord.word}</Text>
+                <Text style={styles.dailyWordDefinition}>{dailyWord.meaning}</Text>
+              </View>
+            )}
+            {history.length > 0 && (
+              <View style={styles.historyBox}>
+                <Text style={styles.sectionTitle}>Histórico recente</Text>
+                <View style={styles.historyList}>
+                  {history.map((item) => (
+                    <Pressable
+                      key={item}
+                      onPress={() => handleChipPress(item)}
+                      style={styles.historyChip}
+                    >
+                      <Text style={styles.historyText}>{item}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+            )}
           </>
         ) : (
           <View style={styles.aboutContainer}>
@@ -156,7 +276,14 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#eee'
+    borderColor: '#eee',
+    gap: 8
+  },
+  definitionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#666',
+    textTransform: 'capitalize'
   },
   definition: {
     fontSize: 20,
@@ -165,6 +292,89 @@ const styles = StyleSheet.create({
   placeholder: {
     fontSize: 16,
     color: '#999'
+  },
+  suggestionsBox: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#eee',
+    gap: 12
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333'
+  },
+  suggestionsList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  suggestionChip: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#f0f0f0'
+  },
+  suggestionText: {
+    fontSize: 14,
+    color: '#333'
+  },
+  dailyWordBox: {
+    backgroundColor: '#222',
+    borderRadius: 16,
+    padding: 20,
+    gap: 8
+  },
+  dailyWordHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  secondaryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#444'
+  },
+  secondaryButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14
+  },
+  dailyWordWord: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+    textTransform: 'capitalize'
+  },
+  dailyWordDefinition: {
+    fontSize: 16,
+    color: '#f5f5f5'
+  },
+  historyBox: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#eee',
+    gap: 12
+  },
+  historyList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+  historyChip: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: '#e8e8e8'
+  },
+  historyText: {
+    fontSize: 14,
+    color: '#333'
   },
   aboutContainer: {
     gap: 16
