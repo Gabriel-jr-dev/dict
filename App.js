@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { NavigationTabs } from './src/components/NavigationTabs';
 import { useDictionaryData } from './src/hooks/useDictionaryData';
 import { wordMap } from './src/data/entries';

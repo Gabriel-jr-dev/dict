@@ -22,17 +22,16 @@ export const AboutScreen = () => {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Próximos passos</Text>
         <Text style={styles.paragraph}>
-          Estamos trabalhando em novas coleções temáticas, exercícios de áudio e desafios
-          semanais. Envie sugestões de palavras ou funcionalidades para ajudar outros
-          estudantes!
+          Estamos trabalhando em novas coleções temáticas, exercícios de áudio e desafios semanais.
+          Envie sugestões de palavras ou funcionalidades para ajudar outros estudantes!
         </Text>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Mais ideias para praticar</Text>
         <Text style={styles.paragraph}>
-          Use as sugestões abaixo como ponto de partida para variar seu estudo e manter a
-          motivação. Escolha um bloco por semana e adapte para a sua realidade.
+          Use as sugestões abaixo como ponto de partida para variar seu estudo e manter a motivação.
+          Escolha um bloco por semana e adapte para a sua realidade.
         </Text>
         <View style={styles.ideaList}>
           {studyIdeaGroups.map((group) => (
@@ -51,6 +50,14 @@ export const AboutScreen = () => {
       </View>
     </ScrollView>
   );
+};
+
+const surfaceShadow = {
+  shadowColor: '#0f172a',
+  shadowOpacity: 0.08,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4
 };
 
 const styles = StyleSheet.create({
@@ -96,7 +103,7 @@ const styles = StyleSheet.create({
     gap: 16
   },
   ideaGroup: {
-    gap: 6
+    gap: 8
   },
   ideaTitle: {
     fontSize: 16,

@@ -29,6 +29,10 @@ export const NavigationTabs = ({ tabs, activeTab, onChange }) => {
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    paddingHorizontal: 24,
+    marginBottom: 12
+  },
   navBar: {
     flexDirection: 'row',
     paddingHorizontal: 20,
@@ -65,6 +69,6 @@ const styles = StyleSheet.create({
     color: '#475569'
   },
   navButtonTextActive: {
-    color: '#fff'
+    color: '#f8fafc'
   }
 });

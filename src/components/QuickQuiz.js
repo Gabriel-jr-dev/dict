@@ -70,8 +70,10 @@ export const QuickQuiz = ({ entries, onSelectWord }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quiz relâmpago</Text>
-      <Text style={styles.subtitle}>Qual palavra corresponde ao significado abaixo?</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Quiz relâmpago</Text>
+        <Text style={styles.subtitle}>Qual palavra combina com o significado abaixo?</Text>
+      </View>
       <Text style={styles.meaning}>{answer.meaning}</Text>
       <View style={styles.options}>
         {options.map((option) => (
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   options: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8
+    gap: 10
   },
   optionButton: {
     paddingVertical: 8,
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4C6EF5'
   },
   secondaryButtonText: {
-    color: '#fff',
+    color: '#f8fafc',
     fontWeight: '600'
   },
   optionButtonPressed: {

@@ -14,8 +14,10 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
       </Text>
       {favoriteEntries.length === 0 ? (
         <View style={styles.emptyState}>
+          <Text style={styles.emptyStateTitle}>Lista vazia</Text>
           <Text style={styles.emptyStateText}>
-            Você ainda não salvou palavras. Volte ao dicionário e toque em “☆ Favoritar”.
+            Você ainda não salvou palavras. Volte ao dicionário e toque em “☆ Favoritar” para
+            começar sua coleção pessoal.
           </Text>
         </View>
       ) : (
@@ -26,7 +28,10 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
             onPress={() => onSelectWord(entry.word)}
           >
             <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>{entry.word}</Text>
+              <View>
+                <Text style={styles.cardTitle}>{entry.word}</Text>
+                <Text style={styles.cardCategory}>{entry.category}</Text>
+              </View>
               <Pressable
                 onPress={(event) => {
                   event.stopPropagation?.();
@@ -44,6 +49,14 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
       )}
     </ScrollView>
   );
+};
+
+const surfaceShadow = {
+  shadowColor: '#0f172a',
+  shadowOpacity: 0.08,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4
 };
 
 const styles = StyleSheet.create({

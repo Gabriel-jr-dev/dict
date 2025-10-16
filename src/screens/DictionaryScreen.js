@@ -64,18 +64,16 @@ export const DictionaryScreen = ({
                 </Text>
               </Pressable>
             </View>
-            <Text style={styles.definition}>{activeEntry.meaning}</Text>
-            <Text style={styles.exampleLabel}>Exemplo:</Text>
-            <Text style={styles.exampleText}>{activeEntry.example}</Text>
-          </>
-        ) : (
-          <Text style={styles.placeholder}>Nenhum resultado encontrado. Tente outra palavra.</Text>
-        )}
+          )}
+        </View>
       </View>
 
       {!activeEntry && suggestions.length > 0 && (
-        <View style={styles.suggestionsBox}>
-          <Text style={styles.sectionTitle}>Talvez você procure:</Text>
+        <View style={styles.surface}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionLabel}>Sugestões</Text>
+            <Text style={styles.sectionHelper}>Toque para preencher a busca</Text>
+          </View>
           <View style={styles.chipList}>
             {suggestions.map((item) => (
               <Pressable
@@ -91,7 +89,7 @@ export const DictionaryScreen = ({
       )}
 
       {dailyWord && (
-        <View style={styles.dailyWordBox}>
+        <View style={[styles.surface, styles.dailyWordBox]}>
           <View style={styles.dailyWordHeader}>
             <Text style={styles.sectionTitle}>Palavra do momento</Text>
             <Pressable
@@ -125,15 +123,15 @@ export const DictionaryScreen = ({
                 onPress={() => onSelectHistory(item)}
                 style={({ pressed }) => [styles.historyChip, pressed && styles.chipPressed]}
               >
-                <Text style={styles.historyText}>{item}</Text>
+                <Text style={styles.chipText}>{item}</Text>
               </Pressable>
             ))}
           </View>
         </View>
       )}
 
-      <View style={styles.categoriesBox}>
-        <Text style={styles.sectionTitle}>Explore por categoria</Text>
+      <View style={styles.surface}>
+        <Text style={styles.sectionLabel}>Explore por categoria</Text>
         <View style={styles.chipList}>
           {categoryOptions.map((category) => {
             const isSelected = category === selectedCategory;
@@ -147,9 +145,7 @@ export const DictionaryScreen = ({
                   pressed && styles.chipPressed
                 ]}
               >
-                <Text
-                  style={[styles.categoryText, isSelected && styles.categoryTextActive]}
-                >
+                <Text style={[styles.chipText, isSelected && styles.categoryChipTextActive]}>
                   {category === 'todas' ? 'Todas' : category}
                 </Text>
               </Pressable>
@@ -173,6 +169,14 @@ export const DictionaryScreen = ({
       <QuickQuiz entries={filteredEntries} onSelectWord={onSelectSuggestion} />
     </ScrollView>
   );
+};
+
+const surfaceShadow = {
+  shadowColor: '#0f172a',
+  shadowOpacity: 0.08,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4
 };
 
 const styles = StyleSheet.create({
@@ -228,8 +232,12 @@ const styles = StyleSheet.create({
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12
+  },
+  resultTitleGroup: {
+    flex: 1,
+    gap: 6
   },
   definitionTitle: {
     fontSize: 20,
@@ -252,7 +260,11 @@ const styles = StyleSheet.create({
     color: '#475569',
     lineHeight: 22
   },
-  placeholder: {
+  placeholderBox: {
+    gap: 6,
+    alignItems: 'flex-start'
+  },
+  placeholderTitle: {
     fontSize: 16,
     color: '#94A3B8'
   },
@@ -287,7 +299,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(76, 110, 245, 0.25)'
   },
-  suggestionText: {
+  chipText: {
     fontSize: 14,
     color: '#1D4ED8',
     fontWeight: '600',
@@ -308,6 +320,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  secondaryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: '#312e81'
+  },
+  secondaryButtonText: {
+    color: '#f5f3ff',
+    fontWeight: '600'
   },
   dailyWordWord: {
     fontSize: 22,
