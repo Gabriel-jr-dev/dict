@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -65,6 +66,15 @@ export const DictionaryScreen = ({
                 </Text>
               </Pressable>
             </View>
+            <Image
+              source={{
+                uri: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=800&q=80'
+              }}
+              style={styles.definitionImage}
+              resizeMode="cover"
+              accessibilityRole="image"
+              accessibilityLabel="Ilustração com letras coloridas"
+            />
             <Pressable
               accessibilityRole="button"
               onPress={() => onOpenDefinition?.(activeEntry)}
@@ -269,6 +279,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1E293B',
     textTransform: 'capitalize'
+  },
+  definitionImage: {
+    width: '100%',
+    height: 168,
+    borderRadius: 16,
+    marginTop: 8,
+    backgroundColor: '#E2E8F0'
   },
   definition: {
     fontSize: 18,
