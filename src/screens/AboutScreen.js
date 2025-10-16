@@ -4,15 +4,13 @@ import { studyIdeaGroups } from '../data/ideas';
 
 export const AboutScreen = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.heroCard}>
-        <Text style={styles.title}>Sobre o Mini Dicionário</Text>
-        <Text style={styles.paragraph}>
-          Este aplicativo foi pensado para estudantes brasileiros que estão começando no inglês.
-          Pesquise palavras, veja exemplos em frases e organize uma lista personalizada de
-          favoritos para revisar sempre que quiser.
-        </Text>
-      </View>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Sobre o Mini Dicionário</Text>
+      <Text style={styles.paragraph}>
+        Este aplicativo foi pensado para estudantes brasileiros que estão dando os
+        primeiros passos no inglês. Pesquise palavras, veja exemplos em frases e
+        organize uma lista personalizada de favoritos para revisar sempre que quiser.
+      </Text>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Como aproveitar melhor</Text>
@@ -63,44 +61,43 @@ const surfaceShadow = {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: '#EEF2FF'
+  },
   container: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingBottom: 32,
-    gap: 18
-  },
-  heroCard: {
-    backgroundColor: '#eef2ff',
-    borderRadius: 18,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#c7d2fe',
-    gap: 12,
-    ...surfaceShadow
+    paddingTop: 12,
+    paddingBottom: 48,
+    gap: 20
   },
   title: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: '#1e1b4b'
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#1E1B4B'
   },
   paragraph: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#475569',
     lineHeight: 24
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 20,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    padding: 22,
     gap: 10,
-    ...surfaceShadow
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0f172a'
+    color: '#1E1B4B'
   },
   ideaList: {
     gap: 16
@@ -111,7 +108,7 @@ const styles = StyleSheet.create({
   ideaTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#312e81'
+    color: '#1E293B'
   },
   ideaDescription: {
     fontSize: 14,
@@ -128,12 +125,12 @@ const styles = StyleSheet.create({
     height: 6,
     marginTop: 8,
     borderRadius: 999,
-    backgroundColor: '#4338ca'
+    backgroundColor: '#4C6EF5'
   },
   ideaText: {
     flex: 1,
     fontSize: 14,
-    color: '#1f2937',
+    color: '#475569',
     lineHeight: 20
   }
 });

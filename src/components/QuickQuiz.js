@@ -87,7 +87,10 @@ export const QuickQuiz = ({ entries, onSelectWord }) => {
         ))}
       </View>
       {feedback && <Text style={styles.feedback}>{feedback}</Text>}
-      <Pressable onPress={handleNext} style={styles.secondaryButton}>
+      <Pressable
+        onPress={handleNext}
+        style={({ pressed }) => [styles.secondaryButton, pressed && styles.secondaryButtonPressed]}
+      >
         <Text style={styles.secondaryButtonText}>Nova pergunta</Text>
       </Pressable>
     </View>
@@ -97,25 +100,21 @@ export const QuickQuiz = ({ entries, onSelectWord }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderRadius: 20,
+    padding: 22,
     gap: 14,
-    shadowColor: '#0f172a',
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 4,
-    marginBottom: 24
-  },
-  header: {
-    gap: 6
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0f172a'
+    color: '#1E1B4B'
   },
   subtitle: {
     fontSize: 14,
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
   },
   meaning: {
     fontSize: 16,
-    color: '#1e293b',
+    color: '#334155',
     lineHeight: 22
   },
   options: {
@@ -135,18 +134,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 999,
-    backgroundColor: '#eef2ff'
-  },
-  optionButtonPressed: {
-    backgroundColor: '#c7d2fe'
+    backgroundColor: '#EEF2FF'
   },
   optionText: {
     fontSize: 14,
-    color: '#312e81'
+    color: '#1E293B',
+    fontWeight: '600'
   },
   feedback: {
     fontSize: 14,
-    color: '#16a34a',
+    color: '#16A34A',
     fontWeight: '600'
   },
   secondaryButton: {
@@ -154,10 +151,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 999,
-    backgroundColor: '#4338ca'
+    backgroundColor: '#4C6EF5'
   },
   secondaryButtonText: {
     color: '#f8fafc',
     fontWeight: '600'
+  },
+  optionButtonPressed: {
+    transform: [{ scale: 0.97 }]
+  },
+  secondaryButtonPressed: {
+    opacity: 0.9
   }
 });

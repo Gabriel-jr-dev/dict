@@ -7,14 +7,11 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
     .filter(Boolean);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.heroCard}>
-        <Text style={styles.heroTitle}>Seus destaques</Text>
-        <Text style={styles.heroSubtitle}>
-          Revise rapidamente as palavras que você marcou como favoritas e mantenha o vocabulário
-          sempre em dia.
-        </Text>
-      </View>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Favoritos</Text>
+      <Text style={styles.subtitle}>
+        Guarde aqui as palavras que você quer revisar com frequência.
+      </Text>
       {favoriteEntries.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyStateTitle}>Lista vazia</Text>
@@ -27,7 +24,7 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
         favoriteEntries.map((entry) => (
           <Pressable
             key={entry.word}
-            style={styles.card}
+            style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
             onPress={() => onSelectWord(entry.word)}
           >
             <View style={styles.cardHeader}>
@@ -40,7 +37,7 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
                   event.stopPropagation?.();
                   onToggleFavorite(entry.word);
                 }}
-                style={styles.removeButton}
+                style={({ pressed }) => [styles.removeButton, pressed && styles.removeButtonPressed]}
               >
                 <Text style={styles.removeButtonText}>Remover</Text>
               </Pressable>
@@ -63,58 +60,55 @@ const surfaceShadow = {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: '#EEF2FF'
+  },
   container: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingBottom: 32,
-    gap: 18
+    paddingTop: 12,
+    paddingBottom: 48,
+    gap: 20
   },
-  heroCard: {
-    backgroundColor: '#f1f5f9',
-    padding: 20,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: '#cbd5f5',
-    gap: 8,
-    ...surfaceShadow
-  },
-  heroTitle: {
-    fontSize: 24,
+  title: {
+    fontSize: 30,
     fontWeight: '700',
-    color: '#1e1b4b'
+    color: '#1E1B4B'
   },
-  heroSubtitle: {
-    fontSize: 15,
+  subtitle: {
+    fontSize: 16,
     color: '#475569',
     lineHeight: 22
   },
   emptyState: {
     backgroundColor: '#fff',
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    padding: 24,
-    gap: 10,
-    ...surfaceShadow
-  },
-  emptyStateTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#0f172a'
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    padding: 28,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4
   },
   emptyStateText: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#475569',
-    lineHeight: 22
+    lineHeight: 24
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: 'rgba(148, 163, 184, 0.25)',
     padding: 20,
     gap: 10,
-    ...surfaceShadow
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3
   },
   cardHeader: {
     flexDirection: 'row',
@@ -124,24 +118,13 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#312e81',
-    textTransform: 'capitalize'
-  },
-  cardCategory: {
-    marginTop: 4,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-    backgroundColor: '#eef2ff',
-    color: '#4338ca',
-    fontSize: 12,
-    fontWeight: '600',
+    color: '#1E1B4B',
     textTransform: 'capitalize'
   },
   cardMeaning: {
     fontSize: 16,
-    color: '#1f2937'
+    color: '#334155',
+    lineHeight: 24
   },
   cardExample: {
     fontSize: 14,
@@ -152,10 +135,16 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 999,
-    backgroundColor: '#fee2e2'
+    backgroundColor: '#F87171'
   },
   removeButtonText: {
-    color: '#b91c1c',
-    fontWeight: '700'
+    color: '#fff',
+    fontWeight: '600'
+  },
+  cardPressed: {
+    transform: [{ scale: 0.98 }]
+  },
+  removeButtonPressed: {
+    opacity: 0.85
   }
 });

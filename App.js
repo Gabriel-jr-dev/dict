@@ -79,15 +79,11 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>Mini Dicionário</Text>
-          <Text style={styles.headerSubtitle}>Aprenda um pouco a cada dia</Text>
-        </View>
+      <StatusBar barStyle="dark-content" backgroundColor="#EEF2FF" />
+      <View style={styles.appContainer}>
+        <NavigationTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <View style={styles.content}>{renderContent()}</View>
       </View>
-      <NavigationTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      <View style={styles.pageContainer}>{renderContent()}</View>
     </SafeAreaView>
   );
 }
@@ -95,32 +91,13 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#EEF2FF'
   },
-  header: {
-    backgroundColor: '#4338ca',
-    paddingHorizontal: 24,
-    paddingVertical: 28,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-    marginBottom: 16,
-    shadowColor: '#312e81',
-    shadowOpacity: 0.18,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8
+  appContainer: {
+    flex: 1,
+    backgroundColor: '#EEF2FF'
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#fff'
-  },
-  headerSubtitle: {
-    marginTop: 6,
-    fontSize: 16,
-    color: '#e0e7ff'
-  },
-  pageContainer: {
+  content: {
     flex: 1
   }
 });
