@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const buildExampleSentences = (entry) => {
   if (!entry) {
@@ -51,19 +51,6 @@ export const DefinitionScreen = ({ entry, onClose, onToggleFavorite, isFavorite 
         <Text style={styles.word}>{entry.word}</Text>
         <Text style={styles.meaning}>{entry.meaning}</Text>
       </View>
-
-      {entry.image && (
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{ uri: entry.image }}
-            style={styles.wordImage}
-            resizeMode="cover"
-            accessible
-            accessibilityLabel={`Imagem ilustrativa para ${entry.word}`}
-          />
-          <Text style={styles.imageCaption}>Uma imagem para lembrar de "{entry.word}"</Text>
-        </View>
-      )}
 
       <View style={styles.examplesBox}>
         <Text style={styles.examplesTitle}>Frases de exemplo</Text>
@@ -153,21 +140,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#334155',
     lineHeight: 26
-  },
-  imageWrapper: {
-    gap: 12,
-    alignItems: 'center'
-  },
-  wordImage: {
-    width: '100%',
-    aspectRatio: 16 / 9,
-    borderRadius: 18
-  },
-  imageCaption: {
-    fontSize: 13,
-    color: '#64748B',
-    fontStyle: 'italic',
-    textAlign: 'center'
   },
   examplesBox: {
     backgroundColor: '#fff',

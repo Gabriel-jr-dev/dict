@@ -66,6 +66,15 @@ export const DictionaryScreen = ({
                 </Text>
               </Pressable>
             </View>
+            <Image
+              source={{
+                uri: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=800&q=80'
+              }}
+              style={styles.definitionImage}
+              resizeMode="cover"
+              accessibilityRole="image"
+              accessibilityLabel="Ilustração com letras coloridas"
+            />
             <Pressable
               accessibilityRole="button"
               onPress={() => onOpenDefinition?.(activeEntry)}
@@ -74,23 +83,12 @@ export const DictionaryScreen = ({
                 pressed && styles.quickDefinitionPressed
               ]}
             >
-              <View style={styles.previewContent}>
-                {activeEntry.image && (
-                  <Image
-                    source={{ uri: activeEntry.image }}
-                    style={styles.previewImage}
-                    resizeMode="cover"
-                    accessible
-                    accessibilityLabel={`Imagem ilustrativa para ${activeEntry.word}`}
-                  />
-                )}
-                <View style={styles.resultTitleGroup}>
-                  <Text style={styles.definition}>{activeEntry.meaning}</Text>
-                  <Text style={styles.exampleLabel}>Exemplo rápido</Text>
-                  <Text style={styles.exampleText}>{activeEntry.example}</Text>
-                </View>
-                <Text style={styles.definitionHint}>Toque para ver mais detalhes</Text>
+              <View style={styles.resultTitleGroup}>
+                <Text style={styles.definition}>{activeEntry.meaning}</Text>
+                <Text style={styles.exampleLabel}>Exemplo rápido</Text>
+                <Text style={styles.exampleText}>{activeEntry.example}</Text>
               </View>
+              <Text style={styles.definitionHint}>Toque para ver mais detalhes</Text>
             </Pressable>
           </>
         ) : (
@@ -282,6 +280,13 @@ const styles = StyleSheet.create({
     color: '#1E293B',
     textTransform: 'capitalize'
   },
+  definitionImage: {
+    width: '100%',
+    height: 168,
+    borderRadius: 16,
+    marginTop: 8,
+    backgroundColor: '#E2E8F0'
+  },
   definition: {
     fontSize: 18,
     color: '#334155',
@@ -305,14 +310,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(148, 163, 184, 0.25)',
     gap: 10
-  },
-  previewContent: {
-    gap: 12
-  },
-  previewImage: {
-    width: '100%',
-    aspectRatio: 16 / 9,
-    borderRadius: 14
   },
   quickDefinitionPressed: {
     backgroundColor: '#E2E8F0'
