@@ -4,7 +4,7 @@ import { studyIdeaGroups } from '../data/ideas';
 
 export const AboutScreen = () => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sobre o Mini Dicionário</Text>
       <Text style={styles.paragraph}>
         Este aplicativo foi pensado para estudantes brasileiros que estão dando os
@@ -54,33 +54,43 @@ export const AboutScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: '#EEF2FF'
+  },
   container: {
     flexGrow: 1,
-    padding: 24,
-    gap: 16
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 48,
+    gap: 20
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '700',
-    color: '#222'
+    color: '#1E1B4B'
   },
   paragraph: {
     fontSize: 16,
-    color: '#444',
+    color: '#475569',
     lineHeight: 24
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#eee',
-    padding: 16,
-    gap: 8
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    padding: 22,
+    gap: 10,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#222'
+    color: '#1E1B4B'
   },
   ideaList: {
     gap: 16
@@ -91,11 +101,11 @@ const styles = StyleSheet.create({
   ideaTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1f2937'
+    color: '#1E293B'
   },
   ideaDescription: {
     fontSize: 14,
-    color: '#4b5563',
+    color: '#475569',
     lineHeight: 20
   },
   ideaItem: {
@@ -108,12 +118,12 @@ const styles = StyleSheet.create({
     height: 6,
     marginTop: 8,
     borderRadius: 999,
-    backgroundColor: '#2563eb'
+    backgroundColor: '#4C6EF5'
   },
   ideaText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: '#475569',
     lineHeight: 20
   }
 });

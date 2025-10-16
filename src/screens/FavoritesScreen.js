@@ -7,7 +7,7 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
     .filter(Boolean);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.container}>
       <Text style={styles.title}>Favoritos</Text>
       <Text style={styles.subtitle}>
         Guarde aqui as palavras que você quer revisar com frequência.
@@ -22,7 +22,7 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
         favoriteEntries.map((entry) => (
           <Pressable
             key={entry.word}
-            style={styles.card}
+            style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
             onPress={() => onSelectWord(entry.word)}
           >
             <View style={styles.cardHeader}>
@@ -32,7 +32,7 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
                   event.stopPropagation?.();
                   onToggleFavorite(entry.word);
                 }}
-                style={styles.removeButton}
+                style={({ pressed }) => [styles.removeButton, pressed && styles.removeButtonPressed]}
               >
                 <Text style={styles.removeButtonText}>Remover</Text>
               </Pressable>
@@ -47,39 +47,55 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: '#EEF2FF'
+  },
   container: {
     flexGrow: 1,
-    padding: 24,
-    gap: 16
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 48,
+    gap: 20
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '700',
-    color: '#222'
+    color: '#1E1B4B'
   },
   subtitle: {
     fontSize: 16,
-    color: '#555'
+    color: '#475569',
+    lineHeight: 22
   },
   emptyState: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#eee',
-    padding: 24
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    padding: 28,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 4
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#555',
-    lineHeight: 22
+    color: '#475569',
+    lineHeight: 24
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#eee',
-    padding: 16,
-    gap: 8
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    padding: 20,
+    gap: 10,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.05,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3
   },
   cardHeader: {
     flexDirection: 'row',
@@ -89,26 +105,33 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#222',
+    color: '#1E1B4B',
     textTransform: 'capitalize'
   },
   cardMeaning: {
     fontSize: 16,
-    color: '#444'
+    color: '#334155',
+    lineHeight: 24
   },
   cardExample: {
     fontSize: 14,
-    color: '#666',
+    color: '#475569',
     lineHeight: 22
   },
   removeButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 999,
-    backgroundColor: '#f87171'
+    backgroundColor: '#F87171'
   },
   removeButtonText: {
     color: '#fff',
     fontWeight: '600'
+  },
+  cardPressed: {
+    transform: [{ scale: 0.98 }]
+  },
+  removeButtonPressed: {
+    opacity: 0.85
   }
 });
