@@ -6,6 +6,7 @@ import { wordMap } from './src/data/entries';
 import { DictionaryScreen } from './src/screens/DictionaryScreen';
 import { FavoritesScreen } from './src/screens/FavoritesScreen';
 import { AboutScreen } from './src/screens/AboutScreen';
+import { DefinitionScreen } from './src/screens/DefinitionScreen';
 
 const tabs = [
   { id: 'dictionary', label: 'Dicionário' },
@@ -15,6 +16,7 @@ const tabs = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dictionary');
+  const [detailEntry, setDetailEntry] = useState(null);
 
   const {
     query,
@@ -36,10 +38,30 @@ export default function App() {
 
   const handleNavigateToDictionary = (word) => {
     setActiveTab('dictionary');
+    setDetailEntry(null);
     handleSelectWord(word);
   };
 
+  const handleOpenDefinition = (entry) => {
+    setDetailEntry(entry);
+  };
+
+  const handleCloseDefinition = () => {
+    setDetailEntry(null);
+  };
+
   const renderContent = () => {
+    if (detailEntry) {
+      return (
+        <DefinitionScreen
+          entry={detailEntry}
+          onClose={handleCloseDefinition}
+          onToggleFavorite={toggleFavorite}
+          isFavorite={favorites.includes(detailEntry.word)}
+        />
+      );
+    }
+
     switch (activeTab) {
       case 'dictionary':
         return (
@@ -60,6 +82,7 @@ export default function App() {
             categoryOptions={categoryOptions}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
+            onOpenDefinition={handleOpenDefinition}
           />
         );
       case 'favorites':
