@@ -31,52 +31,68 @@ export const DictionaryScreen = ({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Mini Dicionário</Text>
-      <Text style={styles.subtitle}>
-        Procure palavras em inglês, veja significados em português e salve suas favoritas.
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite aqui..."
-        value={query}
-        onChangeText={onQueryChange}
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
-      <View style={styles.resultBox}>
-        {activeEntry ? (
-          <>
-            <View style={styles.resultHeader}>
-              <Text style={styles.definitionTitle}>{activeEntry.word}</Text>
-              <Pressable
-                onPress={() => onToggleFavorite(activeEntry.word)}
-                style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
-              >
-                <Text style={[styles.favoriteButtonText, isFavorite && styles.favoriteButtonTextActive]}>
-                  {isFavorite ? '★ Favorito' : '☆ Favoritar'}
-                </Text>
-              </Pressable>
+      <View style={styles.heroCard}>
+        <Text style={styles.heroTitle}>Descubra novas palavras</Text>
+        <Text style={styles.heroSubtitle}>
+          Procure termos em inglês, veja significados rápidos em português e salve os
+          favoritos para revisar depois.
+        </Text>
+      </View>
+
+      <View style={styles.surface}>
+        <Text style={styles.sectionLabel}>Pesquisa rápida</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite uma palavra em inglês"
+          value={query}
+          onChangeText={onQueryChange}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <View style={styles.resultBox}>
+          {activeEntry ? (
+            <>
+              <View style={styles.resultHeader}>
+                <View style={styles.resultTitleGroup}>
+                  <Text style={styles.definitionTitle}>{activeEntry.word}</Text>
+                  <Text style={styles.definitionCategory}>{activeEntry.category}</Text>
+                </View>
+                <Pressable
+                  onPress={() => onToggleFavorite(activeEntry.word)}
+                  style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}
+                >
+                  <Text
+                    style={[styles.favoriteButtonText, isFavorite && styles.favoriteButtonTextActive]}
+                  >
+                    {isFavorite ? '★ Salva' : '☆ Favoritar'}
+                  </Text>
+                </Pressable>
+              </View>
+              <Text style={styles.definition}>{activeEntry.meaning}</Text>
+              <View style={styles.exampleBox}>
+                <Text style={styles.exampleLabel}>Exemplo</Text>
+                <Text style={styles.exampleText}>{activeEntry.example}</Text>
+              </View>
+            </>
+          ) : (
+            <View style={styles.placeholderBox}>
+              <Text style={styles.placeholderTitle}>Nenhum resultado ainda</Text>
+              <Text style={styles.placeholder}>Digite uma palavra ou escolha uma sugestão.</Text>
             </View>
-            <Text style={styles.definition}>{activeEntry.meaning}</Text>
-            <Text style={styles.exampleLabel}>Exemplo:</Text>
-            <Text style={styles.exampleText}>{activeEntry.example}</Text>
-          </>
-        ) : (
-          <Text style={styles.placeholder}>Nenhum resultado encontrado. Tente outra palavra.</Text>
-        )}
+          )}
+        </View>
       </View>
 
       {!activeEntry && suggestions.length > 0 && (
-        <View style={styles.suggestionsBox}>
-          <Text style={styles.sectionTitle}>Talvez você procure:</Text>
+        <View style={styles.surface}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionLabel}>Sugestões</Text>
+            <Text style={styles.sectionHelper}>Toque para preencher a busca</Text>
+          </View>
           <View style={styles.chipList}>
             {suggestions.map((item) => (
-              <Pressable
-                key={item}
-                onPress={() => onSelectSuggestion(item)}
-                style={styles.suggestionChip}
-              >
-                <Text style={styles.suggestionText}>{item}</Text>
+              <Pressable key={item} onPress={() => onSelectSuggestion(item)} style={styles.chip}>
+                <Text style={styles.chipText}>{item}</Text>
               </Pressable>
             ))}
           </View>
@@ -84,11 +100,11 @@ export const DictionaryScreen = ({
       )}
 
       {dailyWord && (
-        <View style={styles.dailyWordBox}>
+        <View style={[styles.surface, styles.dailyWordBox]}>
           <View style={styles.dailyWordHeader}>
-            <Text style={styles.sectionTitle}>Palavra do momento</Text>
+            <Text style={styles.sectionLabelAlt}>Palavra do momento</Text>
             <Pressable onPress={onRefreshDailyWord} style={styles.secondaryButton}>
-              <Text style={styles.secondaryButtonText}>Surpreenda-me</Text>
+              <Text style={styles.secondaryButtonText}>Nova palavra</Text>
             </Pressable>
           </View>
           <Text style={styles.dailyWordWord}>{dailyWord.word}</Text>
@@ -98,9 +114,9 @@ export const DictionaryScreen = ({
       )}
 
       {history.length > 0 && (
-        <View style={styles.historyBox}>
-          <View style={styles.historyHeader}>
-            <Text style={styles.sectionTitle}>Histórico recente</Text>
+        <View style={styles.surface}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionLabel}>Histórico recente</Text>
             <Pressable onPress={onClearHistory} style={styles.linkButton}>
               <Text style={styles.linkButtonText}>Limpar</Text>
             </Pressable>
@@ -110,17 +126,17 @@ export const DictionaryScreen = ({
               <Pressable
                 key={item}
                 onPress={() => onSelectHistory(item)}
-                style={styles.historyChip}
+                style={[styles.chip, styles.historyChip]}
               >
-                <Text style={styles.historyText}>{item}</Text>
+                <Text style={styles.chipText}>{item}</Text>
               </Pressable>
             ))}
           </View>
         </View>
       )}
 
-      <View style={styles.categoriesBox}>
-        <Text style={styles.sectionTitle}>Explore por categoria</Text>
+      <View style={styles.surface}>
+        <Text style={styles.sectionLabel}>Explore por categoria</Text>
         <View style={styles.chipList}>
           {categoryOptions.map((category) => {
             const isSelected = category === selectedCategory;
@@ -128,11 +144,9 @@ export const DictionaryScreen = ({
               <Pressable
                 key={category}
                 onPress={() => onSelectCategory(category)}
-                style={[styles.categoryChip, isSelected && styles.categoryChipActive]}
+                style={[styles.chip, isSelected && styles.categoryChipActive]}
               >
-                <Text
-                  style={[styles.categoryText, isSelected && styles.categoryTextActive]}
-                >
+                <Text style={[styles.chipText, isSelected && styles.categoryChipTextActive]}>
                   {category === 'todas' ? 'Todas' : category}
                 </Text>
               </Pressable>
@@ -158,107 +172,206 @@ export const DictionaryScreen = ({
   );
 };
 
+const surfaceShadow = {
+  shadowColor: '#0f172a',
+  shadowOpacity: 0.08,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4
+};
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 24,
-    gap: 16
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+    gap: 18
   },
-  title: {
-    fontSize: 28,
+  heroCard: {
+    backgroundColor: '#eef2ff',
+    padding: 20,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#c7d2fe',
+    ...surfaceShadow
+  },
+  heroTitle: {
+    fontSize: 24,
     fontWeight: '700',
-    color: '#222'
+    color: '#312e81',
+    marginBottom: 6
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#555'
+  heroSubtitle: {
+    fontSize: 15,
+    color: '#4338ca',
+    lineHeight: 22
+  },
+  surface: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    gap: 14,
+    ...surfaceShadow
+  },
+  sectionLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#0f172a'
+  },
+  sectionLabelAlt: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#e0e7ff'
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  sectionHelper: {
+    fontSize: 13,
+    color: '#64748b'
   },
   input: {
-    height: 48,
-    borderRadius: 12,
+    height: 50,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 16,
-    backgroundColor: '#fff',
-    fontSize: 18
+    borderColor: '#cbd5f5',
+    paddingHorizontal: 18,
+    backgroundColor: '#f8fafc',
+    fontSize: 16,
+    color: '#0f172a'
   },
   resultBox: {
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    padding: 16,
-    justifyContent: 'center',
+    borderRadius: 16,
+    backgroundColor: '#f8fafc',
+    padding: 18,
     borderWidth: 1,
-    borderColor: '#eee',
-    gap: 8
+    borderColor: '#d0d7ee',
+    gap: 12
   },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12
+  },
+  resultTitleGroup: {
+    flex: 1,
+    gap: 6
   },
   definitionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333',
+    color: '#1e1b4b',
+    textTransform: 'capitalize'
+  },
+  definitionCategory: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: '#c7d2fe',
+    color: '#3730a3',
+    fontSize: 12,
+    fontWeight: '600',
     textTransform: 'capitalize'
   },
   definition: {
-    fontSize: 18,
-    color: '#333'
+    fontSize: 17,
+    color: '#1f2937'
+  },
+  exampleBox: {
+    backgroundColor: '#e0e7ff',
+    borderRadius: 14,
+    padding: 12,
+    gap: 4
   },
   exampleLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666'
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#312e81'
   },
   exampleText: {
-    fontSize: 16,
-    color: '#444',
+    fontSize: 15,
+    color: '#1e293b',
     lineHeight: 22
   },
-  placeholder: {
+  placeholderBox: {
+    gap: 6,
+    alignItems: 'flex-start'
+  },
+  placeholderTitle: {
     fontSize: 16,
-    color: '#999'
-  },
-  suggestionsBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#eee',
-    gap: 12
-  },
-  sectionTitle: {
-    fontSize: 18,
     fontWeight: '600',
-    color: '#333'
+    color: '#1f2937'
+  },
+  placeholder: {
+    fontSize: 14,
+    color: '#64748b'
+  },
+  favoriteButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#4338ca'
+  },
+  favoriteButtonActive: {
+    backgroundColor: '#4338ca'
+  },
+  favoriteButtonText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#4338ca'
+  },
+  favoriteButtonTextActive: {
+    color: '#f8fafc'
   },
   chipList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8
+    gap: 10
   },
-  suggestionChip: {
+  chip: {
     paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     borderRadius: 999,
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#eef2ff'
   },
-  suggestionText: {
+  chipText: {
     fontSize: 14,
-    color: '#333'
+    color: '#312e81'
+  },
+  historyChip: {
+    backgroundColor: '#e2e8f0'
+  },
+  categoryChipActive: {
+    backgroundColor: '#4338ca'
+  },
+  categoryChipTextActive: {
+    color: '#f8fafc'
   },
   dailyWordBox: {
-    backgroundColor: '#222',
-    borderRadius: 16,
-    padding: 20,
-    gap: 8
+    backgroundColor: '#4338ca',
+    borderColor: '#3730a3'
   },
   dailyWordHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  secondaryButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: '#312e81'
+  },
+  secondaryButtonText: {
+    color: '#f5f3ff',
+    fontWeight: '600'
   },
   dailyWordWord: {
     fontSize: 22,
@@ -268,115 +381,38 @@ const styles = StyleSheet.create({
   },
   dailyWordDefinition: {
     fontSize: 16,
-    color: '#f5f5f5'
+    color: '#ede9fe'
   },
   dailyWordExample: {
     fontSize: 14,
-    color: '#d9d9d9'
-  },
-  secondaryButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: '#444'
-  },
-  secondaryButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14
-  },
-  historyBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#eee',
-    gap: 12
-  },
-  historyHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  historyChip: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: '#e8e8e8'
-  },
-  historyText: {
-    fontSize: 14,
-    color: '#333'
+    color: '#c7d2fe'
   },
   linkButton: {
-    padding: 8
+    padding: 6
   },
   linkButtonText: {
-    color: '#1d4ed8',
+    color: '#4338ca',
     fontWeight: '600'
-  },
-  favoriteButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#bbb'
-  },
-  favoriteButtonActive: {
-    backgroundColor: '#ffe08a',
-    borderColor: '#f2c94c'
-  },
-  favoriteButtonText: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600'
-  },
-  favoriteButtonTextActive: {
-    color: '#78450f'
-  },
-  categoriesBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#eee',
-    gap: 12
-  },
-  categoryChip: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: '#f0f0f0'
-  },
-  categoryChipActive: {
-    backgroundColor: '#222'
-  },
-  categoryText: {
-    fontSize: 14,
-    color: '#333'
-  },
-  categoryTextActive: {
-    color: '#fff'
   },
   entryList: {
     gap: 12
   },
   entryCard: {
     borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 12,
+    borderColor: '#e0e7ff',
+    borderRadius: 16,
     padding: 16,
-    backgroundColor: '#fafafa',
-    gap: 4
+    backgroundColor: '#f8fafc',
+    gap: 6
   },
   entryWord: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#222',
+    fontWeight: '700',
+    color: '#312e81',
     textTransform: 'capitalize'
   },
   entryMeaning: {
     fontSize: 14,
-    color: '#555'
+    color: '#475569'
   }
 });

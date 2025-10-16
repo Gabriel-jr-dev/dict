@@ -70,14 +70,16 @@ export const QuickQuiz = ({ entries, onSelectWord }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quiz relâmpago</Text>
-      <Text style={styles.subtitle}>Qual palavra corresponde ao significado abaixo?</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Quiz relâmpago</Text>
+        <Text style={styles.subtitle}>Qual palavra combina com o significado abaixo?</Text>
+      </View>
       <Text style={styles.meaning}>{answer.meaning}</Text>
       <View style={styles.options}>
         {options.map((option) => (
           <Pressable
             key={option}
-            style={styles.optionButton}
+            style={({ pressed }) => [styles.optionButton, pressed && styles.optionButtonPressed]}
             onPress={() => handleAnswer(option)}
           >
             <Text style={styles.optionText}>{option}</Text>
@@ -95,55 +97,67 @@ export const QuickQuiz = ({ entries, onSelectWord }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    gap: 12,
+    borderRadius: 18,
+    padding: 20,
     borderWidth: 1,
-    borderColor: '#eee'
+    borderColor: '#e2e8f0',
+    gap: 14,
+    shadowColor: '#0f172a',
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 4,
+    marginBottom: 24
+  },
+  header: {
+    gap: 6
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#222'
+    color: '#0f172a'
   },
   subtitle: {
     fontSize: 14,
-    color: '#666'
+    color: '#475569'
   },
   meaning: {
     fontSize: 16,
-    color: '#333',
+    color: '#1e293b',
     lineHeight: 22
   },
   options: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8
+    gap: 10
   },
   optionButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 999,
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#eef2ff'
+  },
+  optionButtonPressed: {
+    backgroundColor: '#c7d2fe'
   },
   optionText: {
     fontSize: 14,
-    color: '#222'
+    color: '#312e81'
   },
   feedback: {
     fontSize: 14,
-    color: '#2f855a',
+    color: '#16a34a',
     fontWeight: '600'
   },
   secondaryButton: {
     alignSelf: 'flex-start',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 999,
-    backgroundColor: '#222'
+    backgroundColor: '#4338ca'
   },
   secondaryButtonText: {
-    color: '#fff',
+    color: '#f8fafc',
     fontWeight: '600'
   }
 });

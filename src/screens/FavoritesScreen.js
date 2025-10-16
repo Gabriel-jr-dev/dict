@@ -8,14 +8,19 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Favoritos</Text>
-      <Text style={styles.subtitle}>
-        Guarde aqui as palavras que você quer revisar com frequência.
-      </Text>
+      <View style={styles.heroCard}>
+        <Text style={styles.heroTitle}>Seus destaques</Text>
+        <Text style={styles.heroSubtitle}>
+          Revise rapidamente as palavras que você marcou como favoritas e mantenha o vocabulário
+          sempre em dia.
+        </Text>
+      </View>
       {favoriteEntries.length === 0 ? (
         <View style={styles.emptyState}>
+          <Text style={styles.emptyStateTitle}>Lista vazia</Text>
           <Text style={styles.emptyStateText}>
-            Você ainda não salvou palavras. Volte ao dicionário e toque em “☆ Favoritar”.
+            Você ainda não salvou palavras. Volte ao dicionário e toque em “☆ Favoritar” para
+            começar sua coleção pessoal.
           </Text>
         </View>
       ) : (
@@ -26,7 +31,10 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
             onPress={() => onSelectWord(entry.word)}
           >
             <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>{entry.word}</Text>
+              <View>
+                <Text style={styles.cardTitle}>{entry.word}</Text>
+                <Text style={styles.cardCategory}>{entry.category}</Text>
+              </View>
               <Pressable
                 onPress={(event) => {
                   event.stopPropagation?.();
@@ -46,40 +54,67 @@ export const FavoritesScreen = ({ favorites, onSelectWord, onToggleFavorite, wor
   );
 };
 
+const surfaceShadow = {
+  shadowColor: '#0f172a',
+  shadowOpacity: 0.08,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 6 },
+  elevation: 4
+};
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 24,
-    gap: 16
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+    gap: 18
   },
-  title: {
-    fontSize: 28,
+  heroCard: {
+    backgroundColor: '#f1f5f9',
+    padding: 20,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#cbd5f5',
+    gap: 8,
+    ...surfaceShadow
+  },
+  heroTitle: {
+    fontSize: 24,
     fontWeight: '700',
-    color: '#222'
+    color: '#1e1b4b'
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#555'
+  heroSubtitle: {
+    fontSize: 15,
+    color: '#475569',
+    lineHeight: 22
   },
   emptyState: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#eee',
-    padding: 24
+    borderColor: '#e2e8f0',
+    padding: 24,
+    gap: 10,
+    ...surfaceShadow
+  },
+  emptyStateTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#0f172a'
   },
   emptyStateText: {
-    fontSize: 16,
-    color: '#555',
+    fontSize: 15,
+    color: '#475569',
     lineHeight: 22
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#eee',
-    padding: 16,
-    gap: 8
+    borderColor: '#e2e8f0',
+    padding: 20,
+    gap: 10,
+    ...surfaceShadow
   },
   cardHeader: {
     flexDirection: 'row',
@@ -89,26 +124,38 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#222',
+    color: '#312e81',
+    textTransform: 'capitalize'
+  },
+  cardCategory: {
+    marginTop: 4,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+    backgroundColor: '#eef2ff',
+    color: '#4338ca',
+    fontSize: 12,
+    fontWeight: '600',
     textTransform: 'capitalize'
   },
   cardMeaning: {
     fontSize: 16,
-    color: '#444'
+    color: '#1f2937'
   },
   cardExample: {
     fontSize: 14,
-    color: '#666',
+    color: '#475569',
     lineHeight: 22
   },
   removeButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 999,
-    backgroundColor: '#f87171'
+    backgroundColor: '#fee2e2'
   },
   removeButtonText: {
-    color: '#fff',
-    fontWeight: '600'
+    color: '#b91c1c',
+    fontWeight: '700'
   }
 });
