@@ -25,7 +25,8 @@ export const DictionaryScreen = ({
   filteredEntries,
   categoryOptions,
   selectedCategory,
-  onSelectCategory
+  onSelectCategory,
+  onOpenDefinition
 }) => {
   const isFavorite = activeEntry ? favorites.includes(activeEntry.word) : false;
 
@@ -64,8 +65,32 @@ export const DictionaryScreen = ({
                 </Text>
               </Pressable>
             </View>
-          )}
-        </View>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => onOpenDefinition?.(activeEntry)}
+              style={({ pressed }) => [
+                styles.quickDefinition,
+                pressed && styles.quickDefinitionPressed
+              ]}
+            >
+              <View style={styles.resultTitleGroup}>
+                <Text style={styles.definition}>{activeEntry.meaning}</Text>
+                <Text style={styles.exampleLabel}>Exemplo rápido</Text>
+                <Text style={styles.exampleText}>{activeEntry.example}</Text>
+              </View>
+              <Text style={styles.definitionHint}>Toque para ver mais detalhes</Text>
+            </Pressable>
+          </>
+        ) : (
+          <View style={styles.placeholderBox}>
+            <Text style={styles.placeholderTitle}>
+              Procure por uma palavra para ver o significado.
+            </Text>
+            <Text style={styles.placeholderHelper}>
+              Você também pode explorar pelas categorias abaixo.
+            </Text>
+          </View>
+        )}
       </View>
 
       {!activeEntry && suggestions.length > 0 && (
@@ -260,6 +285,23 @@ const styles = StyleSheet.create({
     color: '#475569',
     lineHeight: 22
   },
+  quickDefinition: {
+    marginTop: 6,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.25)',
+    gap: 10
+  },
+  quickDefinitionPressed: {
+    backgroundColor: '#E2E8F0'
+  },
+  definitionHint: {
+    fontSize: 13,
+    color: '#64748B',
+    fontStyle: 'italic'
+  },
   placeholderBox: {
     gap: 6,
     alignItems: 'flex-start'
@@ -267,6 +309,10 @@ const styles = StyleSheet.create({
   placeholderTitle: {
     fontSize: 16,
     color: '#94A3B8'
+  },
+  placeholderHelper: {
+    fontSize: 14,
+    color: '#A5B4FC'
   },
   suggestionsBox: {
     backgroundColor: '#fff',
